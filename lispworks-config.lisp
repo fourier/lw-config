@@ -1,4 +1,5 @@
 ;; -*- Mode: lisp; -*-
+(in-package "CL-USER")
 ;;; The following lines added by ql:add-to-init-file:
 #-quicklisp
 (let ((quicklisp-init (merge-pathnames ".quicklisp/setup.lisp"
@@ -35,7 +36,14 @@
 ;; Cmd-x as extended command ?? doesn't work
 (editor:bind-key "Extended Command" "Hyper-x" :global :mac)
 
-
 ;; Run GUI inspect when called from REPL
 (setf *inspect-through-gui* t)
+
+(editor:bind-key "Function Documentation" "Hyper-F1" :global)
+(editor:bind-key "Show Documentation" "Meta-F1" :global)
+;;(editor:bind-key "Function Arglist" "Meta-=" :global)
+;;(editor:bind-key "Function Argument List" "Meta-A" :global)
+
+(format *standard-output* "~%Press Cmd+F1 to show Hyperspec for symbol~%")
+(format *standard-output* "Press Alt+F1 to show Documentation for symbol~%~%")
 
