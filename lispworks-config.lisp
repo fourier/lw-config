@@ -19,6 +19,9 @@
 ;; Bind Ctrl-Up/Down to previous/next commands in Listener
 (editor:bind-key "History Next" "Control-Down" :mode "Pc Execute")
 (editor:bind-key "History Previous" "Control-Up" :mode "Pc Execute")
+;; Same for Cmd-UP/Down 
+(editor:bind-key "History Next" "Hyper-Down" :mode "Pc Execute")
+(editor:bind-key "History Previous" "Hyper-Up" :mode "Pc Execute")
 
 ;; Enter will indent new line
 (editor:bind-key "Indent New Line" #\Return :mode "Lisp")
@@ -43,6 +46,15 @@
 (editor:bind-key "Show Documentation" "Meta-F1" :global)
 ;;(editor:bind-key "Function Arglist" "Meta-=" :global)
 ;;(editor:bind-key "Function Argument List" "Meta-A" :global)
+
+(ql:quickload "cl-fad")
+
+(let* ((ctrl-u-binds-file "ctrl-u-mac-binds.lisp")
+       (ctrl-u-binds-path (cl-fad:merge-pathnames-as-file (cl-fad:pathname-directory-pathname *load-truename*) ctrl-u-binds-file)))
+  (load ctrl-u-binds-path))
+                            
+;(load "ctrl-u-mac-binds.lisp")
+
 
 (format *standard-output* "~%Press Cmd+F1 to show Hyperspec for symbol~%")
 (format *standard-output* "Press Alt+F1 to show Documentation for symbol~%~%")
