@@ -17,11 +17,11 @@
 (setf *print-circle* t)
 
 ;; Bind Ctrl-Up/Down to previous/next commands in Listener
-(editor:bind-key "History Next" "Control-Down" :mode "Pc Execute")
-(editor:bind-key "History Previous" "Control-Up" :mode "Pc Execute")
+(editor:bind-key "History Next" "Control-Down" :mode "Execute")
+(editor:bind-key "History Previous" "Control-Up" :mode "Execute")
 ;; Same for Cmd-UP/Down 
-(editor:bind-key "History Next" "Hyper-Down" :mode "Pc Execute")
-(editor:bind-key "History Previous" "Hyper-Up" :mode "Pc Execute")
+(editor:bind-key "History Next" "Hyper-Down" :mode "Execute")
+(editor:bind-key "History Previous" "Hyper-Up" :mode "Execute")
 
 ;; Enter will indent new line
 (editor:bind-key "Indent New Line" #\Return :mode "Lisp")
