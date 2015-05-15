@@ -29,6 +29,9 @@
 ;; Run GUI inspect when called from REPL
 (setf *inspect-through-gui* t)
 
+;; default external file format
+ (setf stream::*default-external-format* '(:utf-8 :eol-style :lf))
+
 (ql:quickload "cl-fad")
 
 (defun load-config-file (filename)
@@ -41,7 +44,12 @@
 (load-config-file "editor-extensions.lisp")
 (load-config-file "dvorak-binds.lisp")
 (load-config-file "other-binds.lisp")
+(load-config-file "lw-editor-color-theme/editor-color-theme")
+(load-config-file "darkula-theme.lisp")
+(editor-color-theme:color-theme "darkula")
 
+;; turn off backup files
+(setf (editor:variable-value `editor:backups-wanted) nil)
 
 (format *standard-output* "~%Press Cmd+F1 to show Hyperspec for symbol~%")
 (format *standard-output* "Press Alt+F1 to show Documentation for symbol~%~%")

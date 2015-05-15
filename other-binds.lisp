@@ -61,5 +61,11 @@
 
 ;; Goto Line
 (editor:bind-key "Goto Line" #("Control-u" "g") :global)
+;; Remove all spaces and join lines
 (editor:bind-key "Delete Indentation" #("Control-u" "j") :global)
 
+;; move forward-backward sexp
+(editor:bind-key "Forward List" "Hyper-Right" :global)
+(editor:bind-key "Backward List" "Hyper-Left" :global)
+(editor:bind-key "Forward List" "Meta-Right" :global)
+(editor:bind-key "Backward List" "Meta-Left" :global)
