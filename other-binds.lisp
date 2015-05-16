@@ -69,3 +69,7 @@
 (editor:bind-key "Backward List" "Hyper-Left" :global)
 (editor:bind-key "Forward List" "Meta-Right" :global)
 (editor:bind-key "Backward List" "Meta-Left" :global)
+
+;; Stop debugger on Ctrl-C twice
+(editor:bind-key "Debugger Abort" #("Control-c" "Control-c") :global)
+
