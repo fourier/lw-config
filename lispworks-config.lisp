@@ -51,13 +51,14 @@
 ;; turn off backup files
 (setf (editor:variable-value `editor:backups-wanted) nil)
 
-;; do not highlight found source
-(setf editor:*source-found-action* '(t nil))
+;; do not highlight found source and show found definition at 4th line
+(setf editor:*source-found-action* '(4 nil))
 
 ;; add Sources/ directory to quicklisp local directories
 (let ((sources-dir (cl-fad:merge-pathnames-as-directory (cl-fad:pathname-directory-pathname "~/") "Sources/")))
   (push sources-dir ql:*local-project-directories*))
-;; update list of projects
+
+;; update list of QuickLisp projects
 (ql:register-local-projects)
 
 (format *standard-output* "~%Press Cmd+F1 to show Hyperspec for symbol~%")

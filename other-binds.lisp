@@ -73,3 +73,6 @@
 ;; Stop debugger on Ctrl-C twice
 (editor:bind-key "Debugger Abort" #("Control-c" "Control-c") :global)
 
+
+;; Start Symbol browser by F3
+(editor:bind-key "Apropos" "F3" :global)
