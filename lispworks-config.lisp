@@ -37,7 +37,14 @@
 (defun load-config-file (filename)
   (let ((file-full-path (cl-fad:merge-pathnames-as-file (cl-fad:pathname-directory-pathname *load-truename*) filename)))
     (load file-full-path)))
-  
+
+;; maximum editor windows
+#+lw-editor
+(setf editor:*maximum-ordinary-windows* nil)
+
+;; turn off editor coloring of parenthesis
+(editor::set-parenthesis-colours nil)
+
 (require "delete-selection")
 (editor:delete-selection-mode-command)
 
@@ -46,7 +53,17 @@
 (load-config-file "other-binds.lisp")
 (load-config-file "lw-editor-color-theme/editor-color-theme")
 (load-config-file "darkula-theme.lisp")
+;; TODO: isolate echo area colors, listener colors and add them to editor-color-theme
+(load-config-file "colors.lisp")
+
+
+;; Set the IDEA-style color theme
 (editor-color-theme:color-theme "darkula")
+;; Change the background colors of LispWorks' In-place completion and
+;; 'Function Arglist Displayer' windows:
+;(setf capi::*editor-pane-in-place-background* :black)
+;(setf capi-toolkit::*arglist-displayer-background* :black)
+
 
 ;; turn off backup files
 (setf (editor:variable-value `editor:backups-wanted) nil)

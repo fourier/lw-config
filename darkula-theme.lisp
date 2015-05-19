@@ -57,7 +57,5 @@
   :show-point-face '(:foreground :darkula-matched-brace-foreground
                      :background :darkula-matched-brace-background
                      :bold-p t)
-  :interactive-input-face '(:foreground :cyan))
-
-
-  ;;:non-focus-complete-face '(:background :solarized-base3))
+  :interactive-input-face '(:foreground :cyan)
+  :non-focus-complete-face '(:background :darkula-background))

@@ -76,3 +76,5 @@
 
 ;; Start Symbol browser by F3
 (editor:bind-key "Apropos" "F3" :global)
+(editor:bind-key "Function Arglist Displayer" "F1" :global)
+
