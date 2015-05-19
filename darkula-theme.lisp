@@ -22,6 +22,8 @@
     :darkula-warning-foreground (190 145 23)
     :darkula-matched-brace-foreground (255 239 40)
     :darkula-matched-brace-background (59 81 77)
+    :darkula-incremental-search-background (50 81 61)
+    :darkula-incremental-search-other-matches-background (21 82 33)
     ))
     
 
@@ -58,4 +60,8 @@
                      :background :darkula-matched-brace-background
                      :bold-p t)
   :interactive-input-face '(:foreground :cyan)
-  :non-focus-complete-face '(:background :darkula-background))
+  :non-focus-complete-face '(:background :darkula-background)
+  :incremental-search-face '(:background :darkula-incremental-search-background :underline-p t)
+  :incremental-search-other-matches-face '(:background :darkula-incremental-search-other-matches-background))
+
+

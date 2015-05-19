@@ -71,6 +71,10 @@
 ;; do not highlight found source and show found definition at 4th line
 (setf editor:*source-found-action* '(4 nil))
 
+;; aliases for upcase/downcase region commands
+(editor:define-command-synonym "Upcase Region" "Uppercase Region")
+(editor:define-command-synonym "Downcase Region" "Lowercase Region")
+
 ;; add Sources/ directory to quicklisp local directories
 (let ((sources-dir (cl-fad:merge-pathnames-as-directory (cl-fad:pathname-directory-pathname "~/") "Sources/")))
   (push sources-dir ql:*local-project-directories*))
