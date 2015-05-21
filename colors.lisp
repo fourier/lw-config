@@ -1,5 +1,5 @@
-
 #|
+
 ;; Change Background Color for Lispworks Editor.
 (defun set-listener-pane-colors (x)
   (typecase x

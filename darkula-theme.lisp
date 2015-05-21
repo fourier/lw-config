@@ -39,6 +39,8 @@
 (editor-color-theme:define-color-theme "darkula" ()
   :foreground :darkula-foreground
   :background :darkula-background
+  :listener-background :black
+  :listener-foreground :green
   :region '(:background :darkula-selection-background)
   :highlight '(:background :darkula-background)
   :font-lock-function-name-face '(:foreground :darkula-function-name)

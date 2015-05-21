@@ -51,7 +51,7 @@
 (load-config-file "editor-extensions.lisp")
 (load-config-file "dvorak-binds.lisp")
 (load-config-file "other-binds.lisp")
-(load-config-file "lw-editor-color-theme/editor-color-theme")
+(load-config-file "lw-editor-color-theme/editor-color-theme.lisp")
 (load-config-file "darkula-theme.lisp")
 ;; TODO: isolate echo area colors, listener colors and add them to editor-color-theme
 (load-config-file "colors.lisp")
