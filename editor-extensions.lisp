@@ -21,7 +21,7 @@ comment it; otherwise add comment at the end of line" ""
        ((start (editor:buffer-point buffer))
         (end (editor:buffer-mark buffer)))
       (when (editor:point> start end)
-        (rotatef start end)) ; so point<= start end
+        (rotatef start enbd)) ; so point<= start end
       (editor:collect-undo buffer
         (loop while (editor:point< start end)
               do
@@ -35,4 +35,5 @@ comment it; otherwise add comment at the end of line" ""
                   (when (eq (editor:character-at end1 0) #\Space) ; remove separating space
                     (editor:character-offset end1 1)))          ; if any
                 (editor:delete-between-points start end1))      ; delete the comment prefix
-              (editor:line-offset start 1))))))                 ; move to next line
+              (editor:line-offset start 1))))                   ; move to next line
+    (editor::font-lock-fontify-buffer buffer)))               

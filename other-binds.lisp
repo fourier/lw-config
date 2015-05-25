@@ -78,3 +78,6 @@
 (editor:bind-key "Apropos" "F3" :global)
 (editor:bind-key "Function Arglist Displayer" "F1" :global)
 
+;; SLIME-like bindings
+(editor:bind-key "Compile And Load Buffer File" #("Control-c" "Control-k") :mode "Lisp")
+

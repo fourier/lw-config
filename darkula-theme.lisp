@@ -39,8 +39,11 @@
 (editor-color-theme:define-color-theme "darkula" ()
   :foreground :darkula-foreground
   :background :darkula-background
-  :listener-background :black
-  :listener-foreground :green
+  ;; if not specified uses the :background and :foreground
+  :listener-background :darkula-background
+  :listener-foreground :darkula-foreground
+  :output-background :black
+  :output-foreground :green
   :region '(:background :darkula-selection-background)
   :highlight '(:background :darkula-background)
   :font-lock-function-name-face '(:foreground :darkula-function-name)
