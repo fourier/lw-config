@@ -44,6 +44,8 @@
   :listener-foreground :darkula-foreground
   :output-background :black
   :output-foreground :green
+  :buffers-foreground :darkula-foreground
+  :buffers-background :darkula-background
   :region '(:background :darkula-selection-background)
   :highlight '(:background :darkula-background)
   :font-lock-function-name-face '(:foreground :darkula-function-name)

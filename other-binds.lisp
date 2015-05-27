@@ -46,7 +46,10 @@
 (editor:bind-key "Down List Extending Selection"          "Meta-Control-Shift-Down" :global)
 
 ;; Control-Backspace as usual
-(editor:bind-key "Kill Previous Word" "Control-Backspace" :global)
+(editor:bind-key "Kill Previous Word" "Control-Backspace" :mode "Lisp")
+(editor:bind-key "Kill Previous Word" "Control-Backspace" :mode "Execute")
+;; exeption for Echo Area
+(editor:bind-key "Echo Area Kill Previous Word" "Control-Backspace" :mode "Echo Area")
 
 ;; emacs-like comment hotkey
 (editor:bind-key "Comment Do What I Mean" "Meta-;" :global)
@@ -80,4 +83,5 @@
 
 ;; SLIME-like bindings
 (editor:bind-key "Compile And Load Buffer File" #("Control-c" "Control-k") :mode "Lisp")
+
 
