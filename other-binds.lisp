@@ -84,4 +84,8 @@
 ;; SLIME-like bindings
 (editor:bind-key "Compile And Load Buffer File" #("Control-c" "Control-k") :mode "Lisp")
 
+;; Revert buffer like in Emacs
+(editor:bind-key "Revert Buffer" "F5" :mode "Lisp")
+
+
 
