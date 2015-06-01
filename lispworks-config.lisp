@@ -30,7 +30,11 @@
 (setf *inspect-through-gui* t)
 
 ;; default external file format
- (setf stream::*default-external-format* '(:utf-8 :eol-style :lf))
+(setf stream::*default-external-format* '(:utf-8 :eol-style :lf))
+
+;; editor file format
+(setf (editor:variable-value 'editor:output-format-default
+                             :global) '(:utf-8 :eol-style :lf))
 
 (ql:quickload "cl-fad")
 
