@@ -87,5 +87,10 @@
 ;; Revert buffer like in Emacs
 (editor:bind-key "Revert Buffer" "F5" :mode "Lisp")
 
+;; Meta-up jumps to the beginning of the function
+;; Meta-down jumps to the end of the function
+(editor:bind-key "Beginning of Defun" "Meta-Up" :mode "Lisp")
+(editor:bind-key "End of Defun" "Meta-Down" :mode "Lisp")
+
 
 
