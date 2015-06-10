@@ -16,6 +16,7 @@
     :darkula-variable-name (152 118 170)
     :darkula-string (106 135 89)
     :darkula-keyword (204 120 50)
+    :darkula-builtin  (152 118 170)
     :darkula-caret (187 187 187)
     :darkula-unknown-symbol (188 63 60)
     :darkula-warning-background (82 80 58)
@@ -54,7 +55,7 @@
   :font-lock-variable-name-face '(:foreground :darkula-variable-name :italic-p t)
   :font-lock-string-face '(:foreground :darkula-string)
   :font-lock-keyword-face '(:foreground :darkula-keyword)
-  :font-lock-builtin-face '(:foreground :darkula-keyword :italic-p t)
+  :font-lock-builtin-face '(:foreground :darkula-builtin :italic-p t)
   
   :compiler-note-highlight '(:foreground :magenta
                              :bold-p t)
