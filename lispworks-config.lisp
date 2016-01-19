@@ -11,6 +11,12 @@
   (when (probe-file quicklisp-init)
     (load quicklisp-init)))
 
+;; add Sources/ directory to quicklisp local directories
+(push (pathname "~/Sources/lisp") ql:*local-project-directories*)
+
+;; update list of QuickLisp projects
+(ql:register-local-projects)
+
 ;; to avoid printing circular references. See heap overflow example
 ;; http://paste.lisp.org/+31DI
 ;; Here, in the parent I have a reference to the children. In a child I have
@@ -36,12 +42,6 @@
 (setf (editor:variable-value 'editor:output-format-default
                              :global) '(:utf-8 :eol-style :lf))
 
-(ql:quickload "cl-fad")
-
-(defun load-config-file (filename)
-  (let ((file-full-path (cl-fad:merge-pathnames-as-file (cl-fad:pathname-directory-pathname *load-truename*) filename)))
-    (load file-full-path)))
-
 ;; maximum editor windows
 #+lw-editor
 (setf editor:*maximum-ordinary-windows* nil)
@@ -51,6 +51,26 @@
 
 (require "delete-selection")
 (editor:delete-selection-mode-command)
+
+;; turn off backup files
+(setf (editor:variable-value `editor:backups-wanted) nil)
+
+;; do not highlight found source and show found definition at 4th line
+(setf editor:*source-found-action* '(4 nil))
+
+;; aliases for upcase/downcase region commands
+(editor:define-command-synonym "Upcase Region" "Uppercase Region")
+(editor:define-command-synonym "Downcase Region" "Lowercase Region")
+
+
+(ql:quickload "cl-fad")
+
+
+
+(defun load-config-file (filename)
+  (let ((file-full-path (cl-fad:merge-pathnames-as-file (cl-fad:pathname-directory-pathname *load-truename*) filename)))
+    (load file-full-path)))
+
 
 (load-config-file "editor-extensions.lisp")
 (load-config-file "dvorak-binds.lisp")
@@ -65,26 +85,11 @@
 (editor-color-theme:color-theme "darkula")
 ;; Change the background colors of LispWorks' In-place completion and
 ;; 'Function Arglist Displayer' windows:
-;(setf capi::*editor-pane-in-place-background* :black)
-;(setf capi-toolkit::*arglist-displayer-background* :black)
+                                        ;(setf capi::*editor-pane-in-place-background* :black)
+                                        ;(setf capi-toolkit::*arglist-displayer-background* :black)
 
-
-;; turn off backup files
-(setf (editor:variable-value `editor:backups-wanted) nil)
-
-;; do not highlight found source and show found definition at 4th line
-(setf editor:*source-found-action* '(4 nil))
-
-;; aliases for upcase/downcase region commands
-(editor:define-command-synonym "Upcase Region" "Uppercase Region")
-(editor:define-command-synonym "Downcase Region" "Lowercase Region")
-
-;; add Sources/ directory to quicklisp local directories
-(let ((sources-dir (cl-fad:merge-pathnames-as-directory (cl-fad:pathname-directory-pathname "~/") "Sources/")))
-  (push sources-dir ql:*local-project-directories*))
-
-;; update list of QuickLisp projects
-(ql:register-local-projects)
+;; for SLY
+(ql:quickload "flexi-streams")
 
 (format *standard-output* "~%Press Cmd+F1 to show Hyperspec for symbol~%")
 (format *standard-output* "Press Alt+F1 to show Documentation for symbol~%~%")

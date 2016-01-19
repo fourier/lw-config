@@ -7,7 +7,7 @@
                   (and alpha (/ alpha 255s0))))
 
 (defvar *darkula-color-table*
-  '(:darkula-background  (57 57 57)
+  '(:darkula-background  (43 43 43)
     :darkula-foreground  (169 183 198)
     :darkula-selection-background (33 66 131)
     :darkula-function-name (255 198 109)
