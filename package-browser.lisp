@@ -101,7 +101,7 @@
    (symbols-pane
      capi:multi-column-list-panel
     :filter t
-    :color-function 'color-symbol-if-defined
+    :color-function 'symbols-color-function
     :visible-min-height '(:character 6)
     :interaction :extended-selection
     :columns '((:title :Home-Package) (:title :Name))
@@ -213,22 +213,24 @@
 
 ;;; This is the :COLOR-FUNCTION of the symbols pane.
 ;;; See the doc for COLOR-FUNCTION in the manual entry for CAPI:LIST-PANEL
-
-(defun color-symbol-if-defined (lp symbol state)
+(defun symbols-color-function (lp symbol state)
   (declare (ignore lp))
   (when (eq state :normal)
-    (let ((fboundp (fboundp symbol))
-          (specialp (sys:declared-special-p symbol))
-          (classp (find-class symbol nil)))
-      (cond (fboundp
-             (cond (specialp *sb-fbound-and-special-color*)
-                   (classp *sb-fbound-and-class-color*)
-                   (t *sb-fbound-color*)))
-            (specialp (if classp 
-                          *sb-specialp-and-class-color*
+    (color-symbol-if-defined symbol)))
+
+(defun color-symbol-if-defined (symbol)
+  (let ((fboundp (fboundp symbol))
+        (specialp (sys:declared-special-p symbol))
+        (classp (find-class symbol nil)))
+    (cond (fboundp
+           (cond (specialp *sb-fbound-and-special-color*)
+                 (classp *sb-fbound-and-class-color*)
+                 (t *sb-fbound-color*)))
+          (specialp (if classp 
+                        *sb-specialp-and-class-color*
                         *sb-specialp-color*))
-            (classp *sb-class-color*)
-            (t nil)))))
+          (classp *sb-class-color*)
+          (t nil))))
           
 
 ;;----------------------------------------------------------------------------
