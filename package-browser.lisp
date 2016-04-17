@@ -163,6 +163,9 @@
     :title "Accessibility:"
     :title-position :left
     )
+   (documentation-pane
+    display-pane
+    :title "Documentation")
    )
   
   (:layouts
@@ -188,7 +191,7 @@
     
    (main-layout
      capi:column-layout
-    '(select-layout text-layout :divider  description-pane )
+     '(select-layout text-layout :divider  description-pane :divider documentation-pane)
     :ratios '(  3 9 nil 1))
    )
   (:extra-initargs '(:accessibility))
@@ -290,15 +293,34 @@
 
 (defun update-description-pane (desc-pane symbol)
   (setf (capi:collection-items desc-pane)
-        (list (list "Function" (when (fboundp symbol) (symbol-function symbol)))
-              (list "Value" (when (boundp symbol) (symbol-value symbol))))))
+        (list
+         (cond ((fboundp symbol)
+                (list "Args" (format nil "~s" (function-lambda-list symbol))))
+               ((boundp symbol)
+                (list "Value" (symbol-value symbol)))))))
+
+(defun update-documentation-pane (doc-pane symbol)
+  (let ((doc
+         (cond ((symbol-of-type symbol :functions)
+                (documentation symbol 'function))
+               ((or (symbol-of-type symbol :classes)
+                    (symbol-of-type symbol :structures))
+                (documentation symbol 'type))
+               ((or (symbol-of-type symbol :constants)
+                    (symbol-of-type symbol :variables))
+                (documentation symbol 'variable)))))
+    (setf (display-pane-text doc-pane) doc)))
+    
+          
+
 
 ;;; This is the selection callback in the symbols pane,
 ;;; and also used elsewhere to update the description pane. 
 
 (defun package-browser-display-symbol-description (symbol self)
-  (with-slots (description-pane) self
-    (update-description-pane description-pane symbol)))
+  (with-slots (description-pane documentation-pane) self
+    (update-description-pane description-pane symbol)
+    (update-documentation-pane documentation-pane symbol)))
 
 
 
