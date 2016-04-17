@@ -16,6 +16,9 @@
     '(:all :functions :classes :structures
       :variables :constants :keywords :others))
 
+(defvar *start-package* "COMMON-LISP"
+  "Initial package to show")
+
 
 ;;; These two are used when sorting the symbols by the
 ;;; package (click on the Home-Package header)
@@ -85,7 +88,8 @@
                         :initarg :display-type-filter
                         :accessor package-browser-display-type-filter)
    (list-up-to-date :initform nil)
-   (state :initform nil :accessor package-browser-state))
+   (state :initform nil :accessor package-browser-state)
+   (start-package :initform *start-package* :initarg :start-package))
   (:panes
    (matches-pane
      capi:display-pane
@@ -235,21 +239,11 @@
 ;;; The PACKAGE-BROWSER-STATE object keeps the current state of the interface. 
 ;;; The IDE tool keeps a record of these to implement the History. 
 
-(defstruct (package-browser-state
-            (:print-function print-package-browser-state))
-  search-string
+(defstruct (package-browser-state)
   (symbols :unknown))
 
-(defun print-package-browser-state (self stream level)
-  (declare (ignore level))
-  (print-unreadable-object (self stream :type t :identity t)
-    (format stream "~S" (package-browser-state-search-string self))))
 
 ;;; Accessors that access values on the state. 
-
-(defun package-browser-search-string (self)
-  (when-let (state (package-browser-state self))
-    (package-browser-state-search-string state)))
 
 (defun package-browser-symbols (self)
   (when-let (state (package-browser-state self))
@@ -268,7 +262,6 @@
 
 (defmethod initialize-instance :after  ((self package-browser)
                                    &key
-                                   (regexp nil regexpp)
                                    (accessibility nil accessibility-p)
                                    filter
                                    (display-type-filter *default-type-filter*
@@ -281,37 +274,9 @@
     (setf (package-browser-filter self) filter))
   (when display-type-filter-p
     (setf (package-browser-display-type-filter self) display-type-filter))
-  (when regexpp
-    (setf (package-browser-state self) 
-          (package-browser-coerce-to-state regexp self))))
+  (setf (package-browser-state self) (make-package-browser-state))
+  (on-select-package (slot-value self 'start-package) self))
 
-
-;;; The IDE has a mechanism to keep a history of states. Here
-;;; interface-history is just a dummy. 
-
-(defun interface-history (self)
-  (declare (ignore self))
-  nil)
-
-;;; Convert to object to a package-browser-state, which
-;;; keeps the state of the interface. 
-(defun package-browser-coerce-to-state (object self)
-  (typecase object
-    (package-browser-state object)
-    (string
-     (let ((old-state (find object (interface-history self)
-                            :test 'string=
-                            :key 'package-browser-state-search-string)))
-       (if old-state
-           (progn
-             ;; Make it redo the regexp-find-symbols when given a string.
-             (setf (package-browser-state-symbols old-state) :recompute)
-             old-state)
-         (make-package-browser-state
-          :search-string object))))))
-
-;;; Dummy. The IDE has a more complex mechanism to take various
-;;; settings into account.
 
 (defun package-browser-print-symbol (self symbol)
   (declare (ignore self)) 
@@ -332,14 +297,6 @@
   (with-slots (description-pane) self
     (update-description-pane description-pane symbol)))
 
-
-(defun package-browser-update-current-view (self)
-  nil)
-;;;   (with-slots (apropos-pane) self
-;;;     (let ((search-string (package-browser-search-string self)))
-;;;       (setf (capi:text-input-pane-text apropos-pane) 
-;;;             search-string)
-;;;       (package-browser-update-visible-symbols self))))
 
 
 ;;; This computes which of the symbols that matches the
@@ -384,27 +341,6 @@
 (defmethod (setf package-browser-display-type-filter)
      :after ((options t) (self package-browser))
   (package-browser-update-visible-symbols self))
-
-
-;;; Update functions. 
-(defmethod interface-update (self)
-  nil)
-;;;   (with-slots (apropos-pane) self
-;;;     (let ((search-string (package-browser-search-string self)))
-;;;       (setf (capi:text-input-pane-text apropos-pane) 
-;;;             search-string)
-;;;       (when (> (length search-string) 0)
-;;;         (package-browser-update-symbols self)))))
-
-
-(defmethod (setf package-browser-state) :after ((string t)
-                                           (self package-browser))
-  (let ((state (package-browser-state self)))
-    (if (and state
-             (listp (package-browser-state-symbols state)))
-        (package-browser-update-current-view self)
-      (interface-update self))))
-
 
 
 (defun symbol-of-type (symbol type)
@@ -477,5 +413,5 @@
 ;;; Entry point
 
 (defun show-package-browser ()
-  (capi:display  (make-instance 'package-browser 
-                                :regexp "DEFAULT")))
+  (capi:display  (make-instance 'package-browser)))
+                                
