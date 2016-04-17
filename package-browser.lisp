@@ -30,7 +30,7 @@
                 (string-lessp (symbol-name symbol1) (symbol-name symbol2))
               (string-lessp (package-name p1) (package-name p2)))
           t)
-      (If p2
+      (if p2
           nil
         (string-lessp (symbol-name symbol1) (symbol-name symbol2))))))
           
@@ -85,10 +85,7 @@
                         :initarg :display-type-filter
                         :accessor package-browser-display-type-filter)
    (list-up-to-date :initform nil)
-   (state :initform nil :accessor package-browser-state)
-   (packages :initform :all
-             :initarg :packages 
-             :accessor package-browser-packages))
+   (state :initform nil :accessor package-browser-state))
   (:panes
    (matches-pane
      capi:display-pane
@@ -136,8 +133,8 @@
 ;;;    :print-function 'string-capitalize
     :interaction :single-selection
     :callback-type :data-interface
-;;;     :selected-item (package-browser-display-type-filter capi:interface)
-;;;     :selection-callback #'(setf package-browser-display-type-filter)
+    :selected-item (package-name (find-package "COMMON-LISP"))
+    :selection-callback #'on-select-package
     :visible-max-width t
     :title "Package:"
     :title-position :left
@@ -195,7 +192,7 @@
 
   (:default-initargs
    :layout 'main-layout
-   :title "Simple Symbol Browser"
+   :title "Package Browser"
    :best-height 600
    ))
 
@@ -272,7 +269,6 @@
 (defmethod initialize-instance :after  ((self package-browser)
                                    &key
                                    (regexp nil regexpp)
-                                   (packages :all  packagesp)
                                    (accessibility nil accessibility-p)
                                    filter
                                    (display-type-filter *default-type-filter*
@@ -285,8 +281,6 @@
     (setf (package-browser-filter self) filter))
   (when display-type-filter-p
     (setf (package-browser-display-type-filter self) display-type-filter))
-  (when packagesp
-    (setf (slot-value self 'packages) packages))
   (when regexpp
     (setf (package-browser-state self) 
           (package-browser-coerce-to-state regexp self))))
@@ -338,14 +332,6 @@
   (with-slots (description-pane) self
     (update-description-pane description-pane symbol)))
 
-;;; This is where it actually matches symbols, using
-;;; REGEXP-FIND-SYMBOLS.
-
-(defun package-browser-matching-symbols (self)
-  (let ((packages (package-browser-packages self)))
-    (regexp-find-symbols (package-browser-search-string self)
-                         :packages packages)))
-
 
 (defun package-browser-update-current-view (self)
   nil)
@@ -355,34 +341,27 @@
 ;;;             search-string)
 ;;;       (package-browser-update-visible-symbols self))))
 
-;;; This matches the string, which can take time,
-;;; so do it inside capi:with-busy-interface. In real application
-;;; this may need to be done asynchronously on another thread. 
-
-(defun package-browser-update-symbols (self)
-  (capi:with-busy-interface (self)
-    (setf (package-browser-symbols self)
-          (package-browser-matching-symbols self))))
 
 ;;; This computes which of the symbols that matches the
 ;;; regexp also fits the "accessibility" and the "type"
 
-(defun package-browser-compute-visible-symbols (self)
-  (let* ((type (package-browser-display-type-filter self))
-         (packages (package-browser-packages self))
+(defmethod package-browser-compute-visible-symbols ((self package-browser))
+  (format t "called package-browser-compute-visible-symbols~%")
+  (let* ((current-package (find-package (choice-selected-item (slot-value self 'package-options))))
+         (type (package-browser-display-type-filter self))
          (accessibility (package-browser-accessibility self)))
     (loop for symbol in (package-browser-symbols self)
       for name = (symbol-name symbol)
       for package = (symbol-package symbol)
-      when (and (symbol-of-type symbol type)
+      when (and
+            (eq package current-package)
+            (symbol-of-type symbol type)
                 (or (eq accessibility :all)
-                    (and (or (eq packages :all)
-                             (find package packages))
-                         (or (eq accessibility :present)
-                             (if (eq (nth-value 1 (find-symbol name package))
-                                     :external)
-                                 (eq accessibility :externals-only)
-                               (eq accessibility :internals-only))))))
+                    (or (eq accessibility :present)
+                        (if (eq (nth-value 1 (find-symbol name current-package))
+                                :external)
+                            (eq accessibility :externals-only)
+                            (eq accessibility :internals-only)))))
       collect symbol)))
 
 ;;; The "visible symbols" are the symbols that match the 
@@ -406,9 +385,6 @@
      :after ((options t) (self package-browser))
   (package-browser-update-visible-symbols self))
 
-(defmethod (setf package-browser-packages)
-     :after ((options t) (self package-browser))
-  (interface-update self))
 
 ;;; Update functions. 
 (defmethod interface-update (self)
@@ -470,13 +446,6 @@
         (setf (slot-value self 'list-up-to-date) t)))))
 
 
-;;; Dummy. The IDE has a complex dialog to do that. 
-
-(defun change-package-browser-packages (self)
-  (declare (ignore self))
-  (capi:display-message "Changing packages not implemented"))
-
-
 ;;; Dummies for implementing editing the source.  Rely on 
 ;;; having the LispWorks IDE, in particular on having an interface of type 
 ;;; lw-tools::editor that capi:call-editor can be called with it. 
@@ -494,6 +463,16 @@
     (capi:execute-with-interface interface
                                  'my-call-function interface
                                  data)))
+
+
+(defmethod on-select-package (selected (self package-browser))
+  (format t "select package: ~a~%" selected)
+  (let (symbols)
+    (do-symbols (symb (find-package selected))
+      (push symb symbols))
+  (capi:with-busy-interface (self)
+    (setf (package-browser-symbols self)
+          symbols))))
 
 ;;; Entry point
 
