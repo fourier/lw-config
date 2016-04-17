@@ -133,11 +133,10 @@
     :visible-min-height '(character 2))
    (package-options
     capi:option-pane
-    :items (mapcar #'package-name (list-all-packages))
-;;;    :print-function 'string-capitalize
+    :items (sort (mapcar #'package-name (list-all-packages)) #'string-lessp)
     :interaction :single-selection
+    :test-function #'string=
     :callback-type :data-interface
-    :selected-item (package-name (find-package "COMMON-LISP"))
     :selection-callback #'on-select-package
     :visible-max-width t
     :title "Package:"
@@ -261,21 +260,23 @@
 
 
 (defmethod initialize-instance :after  ((self package-browser)
-                                   &key
-                                   (accessibility nil accessibility-p)
-                                   filter
-                                   (display-type-filter *default-type-filter*
-                                                        display-type-filter-p)
-                                   &allow-other-keys)
-  (when accessibility-p
-    (setf (package-browser-accessibility self)
-          accessibility))
-  (when filter
-    (setf (package-browser-filter self) filter))
-  (when display-type-filter-p
-    (setf (package-browser-display-type-filter self) display-type-filter))
-  (setf (package-browser-state self) (make-package-browser-state))
-  (on-select-package (slot-value self 'start-package) self))
+                                        &key
+                                        (accessibility nil accessibility-p)
+                                        filter
+                                        (display-type-filter *default-type-filter*
+                                                             display-type-filter-p)
+                                        &allow-other-keys)
+  (with-slots (start-package package-options) self
+    (when accessibility-p
+      (setf (package-browser-accessibility self)
+            accessibility))
+    (when filter
+      (setf (package-browser-filter self) filter))
+    (when display-type-filter-p
+      (setf (package-browser-display-type-filter self) display-type-filter))
+    (setf (package-browser-state self) (make-package-browser-state))
+    (setf (choice-selection package-options) (search-for-item package-options start-package))
+    (on-select-package (slot-value self 'start-package) self)))
 
 
 (defun package-browser-print-symbol (self symbol)
@@ -303,7 +304,6 @@
 ;;; regexp also fits the "accessibility" and the "type"
 
 (defmethod package-browser-compute-visible-symbols ((self package-browser))
-  (format t "called package-browser-compute-visible-symbols~%")
   (let* ((current-package (find-package (choice-selected-item (slot-value self 'package-options))))
          (type (package-browser-display-type-filter self))
          (accessibility (package-browser-accessibility self)))
@@ -402,13 +402,12 @@
 
 
 (defmethod on-select-package (selected (self package-browser))
-  (format t "select package: ~a~%" selected)
   (let (symbols)
     (do-symbols (symb (find-package selected))
       (push symb symbols))
   (capi:with-busy-interface (self)
     (setf (package-browser-symbols self)
-          symbols))))
+          (sort symbols #'symbol-lessp)))))
 
 ;;; Entry point
 
