@@ -79,6 +79,7 @@
 
 ;; Start Symbol browser by F3
 (editor:bind-key "Apropos" "F3" :global)
+(editor:bind-key "List Callers" "Hyper-F3" :global)
 (editor:bind-key "Function Arglist Displayer" "F1" :global)
 
 ;; SLIME-like bindings
@@ -91,6 +92,9 @@
 ;; Meta-down jumps to the end of the function
 (editor:bind-key "Beginning of Defun" "Meta-Up" :mode "Lisp")
 (editor:bind-key "End of Defun" "Meta-Down" :mode "Lisp")
+
+(editor:bind-key "Find Source" "Hyper-." :mode "Lisp")
+(editor:bind-key "Next Window" "F6" :global)
 
 
 

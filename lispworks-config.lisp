@@ -3,7 +3,6 @@
 
 ;; load all LispWorks patches
 (load-all-patches)
-
 ;;; The following lines added by ql:add-to-init-file:
 #-quicklisp
 (let ((quicklisp-init (merge-pathnames ".quicklisp/setup.lisp"
@@ -35,6 +34,16 @@
 ;; Run GUI inspect when called from REPL
 (setf *inspect-through-gui* t)
 
+;; When recompiling a file with an existing defpackage, do not warn
+;; when the defpackage is modified
+;; Default value: (:WARN :MODIFY)
+;; See http://www.lispworks.com/documentation/lw61/LW/html/lw-803.htm
+;; for details
+(setf hcl:*handle-existing-defpackage* '(:MODIFY))
+
+;; Fix for OSX El Captain 
+#+cocoa(remhash "NSGlyphStorage" objc::*interned-protocols*)
+
 ;; default external file format
 (setf stream::*default-external-format* '(:utf-8 :eol-style :lf))
 
@@ -62,6 +71,17 @@
 (editor:define-command-synonym "Upcase Region" "Uppercase Region")
 (editor:define-command-synonym "Downcase Region" "Lowercase Region")
 
+;; the following two forms make sure the "Find Source" command works
+;; with the editor source
+#-:lispworks-personal-edition
+(load-logical-pathname-translations "EDITOR-SRC")
+
+#-:lispworks-personal-edition
+(setf dspec:*active-finders*
+        (append dspec:*active-finders*
+                (list "EDITOR-SRC:editor-tags-db")))
+
+
 
 (ql:quickload "cl-fad")
 
@@ -85,11 +105,8 @@
 (editor-color-theme:color-theme "darkula")
 ;; Change the background colors of LispWorks' In-place completion and
 ;; 'Function Arglist Displayer' windows:
-                                        ;(setf capi::*editor-pane-in-place-background* :black)
-                                        ;(setf capi-toolkit::*arglist-displayer-background* :black)
-
-;; for SLY
-(ql:quickload "flexi-streams")
+;; (setf capi::*editor-pane-in-place-background* :black)
+;; (setf capi-toolkit::*arglist-displayer-background* :black)
 
 (format *standard-output* "~%Press Cmd+F1 to show Hyperspec for symbol~%")
 (format *standard-output* "Press Alt+F1 to show Documentation for symbol~%~%")
