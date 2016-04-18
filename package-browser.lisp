@@ -1,11 +1,13 @@
 ;;; This a stripped-down version of the code SIMPLE-SYMBOL-BROWSER 
 ;;; example in the LispWorks IDE. 
+;;
+;; To use, call:
+;; (package-browser:show-package-browser) 
+;;
 
 (defpackage #:package-browser
   (:documentation "Simple browser of all symbols in package")
-  (:use #:cl #:capi #:alexandria)
-  ;; these names should be from alexandria rather than lispworks
-  (:shadowing-import-from #:alexandria if-let removef when-let* appendf copy-file with-unique-names nconcf when-let)
+  (:use #:cl #:capi)
   (:export show-package-browser)
   (:add-use-defaults t))
 
