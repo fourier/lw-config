@@ -19,7 +19,8 @@
 (editor:bind-key "Forward Word" "Hyper-Right" :global)
 (editor:bind-key "Backward Word" "Hyper-Left" :global)
 
-(editor:bind-key "Function Documentation" "Hyper-F1" :global)
+;;(editor:bind-key "Function Documentation" "Hyper-F1" :global)
+(editor:bind-key "Search In Dash" "Hyper-F1" :global)
 (editor:bind-key "Show Documentation" "Meta-F1" :global)
 ;;(editor:bind-key "Function Arglist" "Meta-=" :global)
 ;;(editor:bind-key "Function Argument List" "Meta-A" :global)
@@ -74,7 +75,7 @@
 (editor:bind-key "Backward List" "Meta-Left" :global)
 
 ;; Stop debugger on Ctrl-C twice
-(editor:bind-key "Debugger Abort" #("Control-c" "Control-c") :global)
+(editor:bind-key "Debugger Abort" #("Control-c" "Control-c") :mode "Execute")
 
 
 ;; Start Symbol browser by F3
@@ -84,6 +85,7 @@
 
 ;; SLIME-like bindings
 (editor:bind-key "Compile And Load Buffer File" #("Control-c" "Control-k") :mode "Lisp")
+(editor:bind-key "Save File and Compile Defun" #("Control-c" "Control-c") :mode "Lisp")
 
 ;; Revert buffer like in Emacs
 (editor:bind-key "Revert Buffer" "F5" :mode "Lisp")
@@ -95,6 +97,7 @@
 
 (editor:bind-key "Find Source" "Hyper-." :mode "Lisp")
 (editor:bind-key "Next Window" "F6" :global)
-
+;; Cmd+i in Listener to inspect last value
+;; (editor:bind-key "Inspect Star" "Hyper-i" :mode "Execute")
 
 

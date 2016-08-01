@@ -108,6 +108,4 @@
 ;; (setf capi::*editor-pane-in-place-background* :black)
 ;; (setf capi-toolkit::*arglist-displayer-background* :black)
 
-(format *standard-output* "~%Press Cmd+F1 to show Hyperspec for symbol~%")
-(format *standard-output* "Press Alt+F1 to show Documentation for symbol~%~%")
 

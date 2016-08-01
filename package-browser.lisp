@@ -83,7 +83,7 @@
 ;;----------------------------------------------------------------------------
 
 
-(capi:define-interface package-browser ()
+(capi:define-interface package-browser (lispworks-tools::lispworks-interface)
   ((visible-symbols :initform nil :accessor package-browser-visible-symbols)
 
    (display-type-filter :initform *default-type-filter*
