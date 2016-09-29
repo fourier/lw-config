@@ -59,7 +59,7 @@
 (editor::set-parenthesis-colours nil)
 
 (require "delete-selection")
-(editor:delete-selection-mode-command)
+(editor:delete-selection-mode-command t)
 
 ;; turn off backup files
 (setf (editor:variable-value `editor:backups-wanted) nil)
@@ -86,19 +86,16 @@
 (ql:quickload "cl-fad")
 
 
-
-(defun load-config-file (filename)
-  (let ((file-full-path (cl-fad:merge-pathnames-as-file (cl-fad:pathname-directory-pathname *load-truename*) filename)))
-    (load file-full-path)))
-
-
-(load-config-file "editor-extensions.lisp")
-(load-config-file "dvorak-binds.lisp")
-(load-config-file "other-binds.lisp")
-(load-config-file "lw-editor-color-theme/editor-color-theme.lisp")
-(load-config-file "darkula-theme.lisp")
-;; TODO: isolate echo area colors, listener colors and add them to editor-color-theme
-(load-config-file "colors.lisp")
+(flet ((load-config-file (filename)
+         (let ((file-full-path (cl-fad:merge-pathnames-as-file (cl-fad:pathname-directory-pathname *load-truename*) filename)))
+           (load file-full-path))))
+  (load-config-file "editor-extensions.lisp")
+  (load-config-file "dvorak-binds.lisp")
+  (load-config-file "other-binds.lisp")
+  (load-config-file "lw-editor-color-theme/editor-color-theme.lisp")
+  (load-config-file "darkula-theme.lisp")
+  ;; TODO: isolate echo area colors, listener colors and add them to editor-color-theme
+  (load-config-file "colors.lisp"))
 
 
 ;; Set the IDEA-style color theme

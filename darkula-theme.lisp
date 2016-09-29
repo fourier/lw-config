@@ -25,6 +25,8 @@
     :darkula-matched-brace-background (59 81 77)
     :darkula-incremental-search-background (50 81 61)
     :darkula-incremental-search-other-matches-background (21 82 33)
+    :darkula-buffers-list-selected-foreground (255 255 255)
+    :darkula-buffers-list-unselected-foreground (187 187 187)
     ))
     
 
@@ -45,7 +47,8 @@
   :listener-foreground :darkula-foreground
   :output-background :black
   :output-foreground :green
-  :buffers-foreground :darkula-foreground
+  :buffers-foreground :darkula-buffers-list-unselected-foreground
+  :buffers-selected-foreground :darkula-buffers-list-selected-foreground
   :buffers-background :darkula-background
   :region '(:background :darkula-selection-background)
   :highlight '(:background :darkula-background)
