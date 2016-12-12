@@ -101,3 +101,16 @@
 ;; (editor:bind-key "Inspect Star" "Hyper-i" :mode "Execute")
 
 
+(editor:bind-key "Select Previous Buffer" "Ctrl-Return" :mode "Lisp")
+
+
+;; Buffers tab
+;;(editor:bind-key "List Buffers" "Ctrl-d" :mode "Lisp")
+;; Definitions tab
+(editor:bind-key "List Buffer Definitions" "Ctrl-d" :mode "Lisp")
+;; Changed Definitions tab
+;;(editor:bind-key "Buffer Changed Definitions" "Ctrl-d" :mode "Lisp")
+;; Find Definitions tab
+;;(editor:bind-key "View Source Search" "Ctrl-d" :mode "Lisp")
+
+(editor:bind-key "Focus On Buffers Search" "F2" :mode "Lisp")

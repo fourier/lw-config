@@ -92,3 +92,46 @@ comment it; otherwise add comment at the end of line" ""
      "Save current file and compile current function"
   (editor:save-file-command p)
   (editor:compile-defun-command p))
+;;(capi:find-interface 'lw-tools::system-browser)
+#|
+(editor:defcommand "Browse Parent System" (p)
+     "Browse Parent System"
+     "Browse Parent System"
+  (lw-tools::find-parent-system "/Users/alexeyv/Sources/lisp/git-api/src/pack.lisp")
+   ;;(buffer-pathname (current-buffer))))
+|#
+;; (lispworks-tools::make-tools-menu-callback 'lispworks-tools:system-browser)
+;;(capi:find-interface 'lw-tools:system-browser)
+
+;;; (defcommand "Tools Editor" (p)
+;;;      "Invokes the Editor"
+;;;   (declare (ignore p))
+;;;   (lispworks-tools::make-tools-menu-callback (capi:find-interface 'lw-tools:listener)));;'lispworks-tools:editor nil))
+;;;     
+;;; (bind-key "Tools Editor" #\meta-control-\e)
+
+;;; (defcommand "Tools Listener" (p)
+;;;      "Acts like menu Works > Tools > Listener"
+;;;   (declare (ignore p))
+;;;   (capi:find-interface 'lw-tools:listener))
+;;;   ;(lispworks-tools::make-tools-menu-callback 'lispworks-tools:listener))
+;;;     
+;;; (bind-key "Tools Listener" #\meta-control-\l)
+
+
+(editor:defcommand "Focus On Buffers Search" (p)
+     "When 'Show Buffers List' is enabled, move focus to the filter edit of the buffers list"
+     "When 'Show Buffers List' is enabled, move focus to the filter edit of the buffers list"
+  ;; capi::layouts -> main layout -> panes [capi::pane-geometry] ->capi::object = capi::tab-layout ->
+  (declare (ignore p))
+  (when-let* ((editor-iface (capi:top-level-interface (editor::current-editor-pane)))
+              (layouts (slot-value editor-iface 'capi::layouts))
+              (text-layout (find-if (lambda (pane) (eq (capi:capi-object-name pane) 'lispworks-tools::text-layout)) layouts))
+              (text-layout-panes (slot-value text-layout 'capi::panes))
+              (filter-layout-pane (find-if (lambda (pane)
+                                             (typep (slot-value pane 'capi::object) 'capi::filter-layout)) text-layout-panes))
+              (filter-layout (slot-value filter-layout-pane 'capi::object))
+              (descr (slot-value filter-layout 'capi:filtering-layout))
+              (filter (slot-value descr 'capi:text-input-pane)))
+   (capi:set-pane-focus filter)))
+     

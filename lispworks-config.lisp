@@ -87,8 +87,8 @@
 
 
 (flet ((load-config-file (filename)
-         (let ((file-full-path (cl-fad:merge-pathnames-as-file (cl-fad:pathname-directory-pathname *load-truename*) filename)))
-           (load file-full-path))))
+        (let ((file-full-path (cl-fad:merge-pathnames-as-file (cl-fad:pathname-directory-pathname *load-truename*) filename)))
+          (compile-file file-full-path :load t))))
   (load-config-file "editor-extensions.lisp")
   (load-config-file "dvorak-binds.lisp")
   (load-config-file "other-binds.lisp")
@@ -98,6 +98,7 @@
   (load-config-file "colors.lisp"))
 
 
+
 ;; Set the IDEA-style color theme
 (editor-color-theme:color-theme "darkula")
 ;; Change the background colors of LispWorks' In-place completion and
@@ -105,4 +106,6 @@
 ;; (setf capi::*editor-pane-in-place-background* :black)
 ;; (setf capi-toolkit::*arglist-displayer-background* :black)
 
-
+;; start the Editor after the startup
+(define-action "Initialize LispWorks Tools" "Ensure an Editor"
+  (lambda (&optional screen) (capi:find-interface 'lw-tools:editor :screen screen)))
