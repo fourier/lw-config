@@ -98,6 +98,15 @@
   (load-config-file "colors.lisp"))
 
 
+;; configuration of the cl-project
+(ql:quickload :cl-project)
+(setf cl-project:*skeleton-directory*
+      (merge-pathnames "Sources/lisp/skeleton/"
+                       (user-homedir-pathname)))
+
+
+(load (merge-pathnames "Sources/lisp/lw-project/lw-project.lisp"
+                       (user-homedir-pathname)))
 
 ;; Set the IDEA-style color theme
 (editor-color-theme:color-theme "darkula")
@@ -106,6 +115,14 @@
 ;; (setf capi::*editor-pane-in-place-background* :black)
 ;; (setf capi-toolkit::*arglist-displayer-background* :black)
 
+
 ;; start the Editor after the startup
 (define-action "Initialize LispWorks Tools" "Ensure an Editor"
   (lambda (&optional screen) (capi:find-interface 'lw-tools:editor :screen screen)))
+
+
+;; start the System Browser after the startup
+(define-action "Initialize LispWorks Tools" "Ensure System Browser"
+  (lambda (&optional screen) (capi:find-interface 'lw-tools:system-browser :screen screen)))
+
+
