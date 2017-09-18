@@ -20,14 +20,15 @@
 (editor:bind-key "Backward Word" "Hyper-Left" :global)
 
 ;;(editor:bind-key "Function Documentation" "Hyper-F1" :global)
-(editor:bind-key "Search In Dash" "Hyper-F1" :global)
+#+:cocoa (editor:bind-key "Search In Dash" "Hyper-F1" :global)
+#-:cocoa (editor:bind-key "Search In Dash" "Ctrl-F1" :global)
 (editor:bind-key "Show Documentation" "Meta-F1" :global)
 ;;(editor:bind-key "Function Arglist" "Meta-=" :global)
 ;;(editor:bind-key "Function Argument List" "Meta-A" :global)
 
 ;; selection keys to emulate Mac-emulation mode
-(require "mac-mode")
-(require "selection-mode")
+;;(require "win-mode")
+;;(require "selection-mode")
 (editor:bind-key "Backward Character Extending Selection" "Shift-Left" :global)
 (editor:bind-key "Forward Character Extending Selection"  "Shift-Right" :global)
 (editor:bind-key "Previous Line Extending Selection"      "Shift-Up" :global)
@@ -99,7 +100,9 @@
 (editor:bind-key "Next Window" "F6" :global)
 ;; Cmd+i in Listener to inspect last value
 ;; (editor:bind-key "Inspect Star" "Hyper-i" :mode "Execute")
-
+;; bind Ctrl-C Ctrl-C to compile defun like in Slime
+(editor:bind-key "Compile Defun" #("Control-c" "Control-c") :mode "Lisp")
+(editor:bind-key "Next Ordinary Window" "Meta-`" :global)
 
 (editor:bind-key "Select Previous Buffer" "Ctrl-Return" :mode "Lisp")
 

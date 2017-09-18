@@ -79,12 +79,39 @@ comment it; otherwise add comment at the end of line" ""
               (line-offset start 1))))                   ; move to next line
     (editor::font-lock-fontify-buffer buffer)))               
 
+#+:mswindows
+(fli:define-c-typedef fli-hwnd
+  (:unsigned :long))
+
+#+:mswindows
+(fli:define-foreign-function (shell-execute "ShellExecute" :dbcs)
+    ((hwnd fli-hwnd)
+     (lp-operation :pointer)
+     (lp-file :pointer)
+     (lp-parameters :pointer)
+     (lp-directory :pointer)
+     (n-show-cmd :int32))
+  :result-type (:unsigned :long)
+  :documentation "Performs an operation on a specified file.")
+
+(defun open-in-dash (name)
+  (let ((url (concatenate 'string "dash://" name)))
+    #+:mswindows
+    (flet ((null-ptr () (fli:make-pointer :address 0 :type :void)))
+      (fli:with-foreign-string (text element-count byte-count 
+                                     :external-format :unicode)
+          url
+        (declare (ignore element-count byte-count))
+        (shell-execute 0 (null-ptr) text  (null-ptr) (null-ptr) 5)))
+    #+:cocoa
+    (objc:invoke (objc:invoke "NSWorkspace" "sharedWorkspace") "openURL:" (objc:invoke "NSURL" "URLWithString:" url))))
+
 
 (editor:defcommand "Search In Dash" (p &optional name)
      "Search current word in Dash"
      "Search current word in Dash"
   (let* ((name (format nil "~a" (editor:get-symbol-from-point (editor:current-point)))))
-    (objc:invoke (objc:invoke "NSWorkspace" "sharedWorkspace") "openURL:" (objc:invoke "NSURL" "URLWithString:" (concatenate 'string "dash://" name)))))
+    (open-in-dash name)))
 
 
 (editor:defcommand "Save File and Compile Defun" (p)
@@ -134,4 +161,3 @@ comment it; otherwise add comment at the end of line" ""
               (descr (slot-value filter-layout 'capi:filtering-layout))
               (filter (slot-value descr 'capi:text-input-pane)))
    (capi:set-pane-focus filter)))
-     

@@ -1,20 +1,35 @@
-;; -*- Mode: lisp; -*-
+; -*- Mode: lisp; -*-
 (in-package "CL-USER")
 
 ;; load all LispWorks patches
-(load-all-patches)
+
+#-:LISPWORKS-PERSONAL-EDITION (load-all-patches)
+#+(and LISPWORKS-PERSONAL-EDITION MSWINDOWS) (load "C:/apps/asdf/asdf.lisp")
+
 ;;; The following lines added by ql:add-to-init-file:
 #-quicklisp
-(let ((quicklisp-init (merge-pathnames ".quicklisp/setup.lisp"
-                                       (user-homedir-pathname))))
+(let ((quicklisp-init #+:MSWINDOWS "C:/apps/quicklisp/setup.lisp"
+					  #-:MSWINDOWS (merge-pathnames ".quicklisp/setup.lisp"
+                                                                        (user-homedir-pathname))))
+  (format *standard-output* "ql init: ~s" quicklisp-init)
   (when (probe-file quicklisp-init)
     (load quicklisp-init)))
 
+
+#+(and LISPWORKS7.0 :MSWINDOWS)
+(scm:require-private-patch "C:/Sources/lisp/lw-config/shell-open-command.ofasl" :hqn-web)
+
+
 ;; add Sources/ directory to quicklisp local directories
-(push (pathname "~/Sources/lisp") ql:*local-project-directories*)
+(push (pathname #+:MSWINDOWS "C:/Sources/lisp" #-:MSWINDOWS "~/Sources/lisp") ql:*local-project-directories*)
 
 ;; update list of QuickLisp projects
 (ql:register-local-projects)
+
+;; load dependencies used in this config file
+(ql:quickload "cl-fad")
+(ql:quickload :cl-project)
+
 
 ;; to avoid printing circular references. See heap overflow example
 ;; http://paste.lisp.org/+31DI
@@ -82,34 +97,39 @@
                 (list "EDITOR-SRC:editor-tags-db")))
 
 
-
-(ql:quickload "cl-fad")
-
-
 (flet ((load-config-file (filename)
-        (let ((file-full-path (cl-fad:merge-pathnames-as-file (cl-fad:pathname-directory-pathname *load-truename*) filename)))
-          (compile-file file-full-path :load t))))
+		 (let ((file-full-path (cl-fad:merge-pathnames-as-file
+								#+MSWINDOWS
+								"C:/Sources/lisp/lw-config/"
+								#-MSWINDOWS
+								(cl-fad:pathname-directory-pathname *load-truename*)
+								filename)))
+		   (format *standard-output* "Loading config file: ~s" file-full-path)
+		   (load file-full-path))))
   (load-config-file "editor-extensions.lisp")
   (load-config-file "dvorak-binds.lisp")
   (load-config-file "other-binds.lisp")
   (load-config-file "lw-editor-color-theme/editor-color-theme.lisp")
   (load-config-file "darkula-theme.lisp")
   ;; TODO: isolate echo area colors, listener colors and add them to editor-color-theme
-  (load-config-file "colors.lisp"))
-
+  (load-config-file "colors.lisp")
+  )
 
 ;; configuration of the cl-project
-(ql:quickload :cl-project)
 (setf cl-project:*skeleton-directory*
       (merge-pathnames "Sources/lisp/skeleton/"
-                       (user-homedir-pathname)))
+                       #+:MSWINDOWS "C:/" #-:MSWINDOWS(user-homedir-pathname)))
 
-
-(load (merge-pathnames "Sources/lisp/lw-project/lw-project.lisp"
-                       (user-homedir-pathname)))
+(let ((lw-project
+	   (merge-pathnames "Sources/lisp/lw-project/lw-project.lisp"
+						#+:MSWINDOWS "C:/" #-:MSWINDOWS (user-homedir-pathname))))
+  (when (fad:file-exists-p lw-project)
+	(load lw-project)))
 
 ;; Set the IDEA-style color theme
-(editor-color-theme:color-theme "darkula")
+
+#+(and (not lispworks-personal-edition) (not cocoa)) (editor-color-theme:color-theme "default")
+#+cocoa (editor-color-theme:color-theme "darkula")
 ;; Change the background colors of LispWorks' In-place completion and
 ;; 'Function Arglist Displayer' windows:
 ;; (setf capi::*editor-pane-in-place-background* :black)
@@ -117,12 +137,15 @@
 
 
 ;; start the Editor after the startup
-(define-action "Initialize LispWorks Tools" "Ensure an Editor"
-  (lambda (&optional screen) (capi:find-interface 'lw-tools:editor :screen screen)))
+;;(define-action "Initialize LispWorks Tools" "Ensure an Editor"
+;;  (lambda (&optional screen) (capi:find-interface 'lw-tools:editor :screen screen)))
 
 
 ;; start the System Browser after the startup
-(define-action "Initialize LispWorks Tools" "Ensure System Browser"
-  (lambda (&optional screen) (capi:find-interface 'lw-tools:system-browser :screen screen)))
+;;(define-action "Initialize LispWorks Tools" "Ensure System Browser"
+;;  (lambda (&optional screen) (capi:find-interface 'lw-tools:system-browser :screen screen)))
 
+
+(format *standard-output* "~%Press Cmd+F1 to show Hyperspec for symbol~%")
+(format *standard-output* "Press Alt+F1 to show Documentation for symbol~%~%")
 
