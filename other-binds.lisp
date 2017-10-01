@@ -102,7 +102,8 @@
 ;; (editor:bind-key "Inspect Star" "Hyper-i" :mode "Execute")
 ;; bind Ctrl-C Ctrl-C to compile defun like in Slime
 (editor:bind-key "Compile Defun" #("Control-c" "Control-c") :mode "Lisp")
-(editor:bind-key "Next Ordinary Window" "Meta-`" :global)
+#+:cocoa (editor:bind-key "Next Ordinary Window" "Meta-`" :global)
+#-:cocoa (editor:bind-key "Next Window" "Meta-`" :global)
 
 (editor:bind-key "Select Previous Buffer" "Ctrl-Return" :mode "Lisp")
 

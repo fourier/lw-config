@@ -97,12 +97,12 @@ comment it; otherwise add comment at the end of line" ""
 (defun open-in-dash (name)
   (let ((url (concatenate 'string "dash://" name)))
     #+:mswindows
-    (flet ((null-ptr () (fli:make-pointer :address 0 :type :void)))
+    (let ((null-ptr (fli:make-pointer :address 0 :type :void)))
       (fli:with-foreign-string (text element-count byte-count 
                                      :external-format :unicode)
           url
         (declare (ignore element-count byte-count))
-        (shell-execute 0 (null-ptr) text  (null-ptr) (null-ptr) 5)))
+        (shell-execute 0 null-ptr text  null-ptr null-ptr 5)))
     #+:cocoa
     (objc:invoke (objc:invoke "NSWorkspace" "sharedWorkspace") "openURL:" (objc:invoke "NSURL" "URLWithString:" url))))
 
