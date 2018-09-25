@@ -59,6 +59,9 @@
 ;; Ctrl-Up/Down move one paragraph up/down
 (editor:bind-key "Forward Paragraph" "Control-Down" :global)
 (editor:bind-key "Backward Paragraph" "Control-Up" :global)
+(editor:bind-key "Forward Paragraph" "Control-Down" :mode "Lisp")
+(editor:bind-key "Backward Paragraph" "Control-Up" :mode "Lisp")
+
 
 ;; Cmd-Up/Down move one sentence up/down
 (editor:bind-key "Forward Sentence" "Hyper-Down" :global)
@@ -72,8 +75,8 @@
 ;; move forward-backward sexp
 (editor:bind-key "Forward List" "Hyper-Right" :global)
 (editor:bind-key "Backward List" "Hyper-Left" :global)
-(editor:bind-key "Forward List" "Meta-Right" :global)
-(editor:bind-key "Backward List" "Meta-Left" :global)
+(editor:bind-key "Forward Form" "Meta-Right" :global)
+(editor:bind-key "Backward Form" "Meta-Left" :global)
 
 ;; Stop debugger on Ctrl-C twice
 (editor:bind-key "Debugger Abort" #("Control-c" "Control-c") :mode "Execute")
@@ -82,6 +85,7 @@
 ;; Start Symbol browser by F3
 (editor:bind-key "Apropos" "F3" :global)
 (editor:bind-key "List Callers" "Hyper-F3" :global)
+(editor:bind-key "List Callers" "Meta-F3" :global)
 (editor:bind-key "Function Arglist Displayer" "F1" :global)
 
 ;; SLIME-like bindings
@@ -98,6 +102,7 @@
 
 (editor:bind-key "Find Source" "Hyper-." :mode "Lisp")
 (editor:bind-key "Next Window" "F6" :global)
+;; probably bind F6 to "Stepper Step" command ?
 ;; Cmd+i in Listener to inspect last value
 ;; (editor:bind-key "Inspect Star" "Hyper-i" :mode "Execute")
 ;; bind Ctrl-C Ctrl-C to compile defun like in Slime

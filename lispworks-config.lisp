@@ -145,6 +145,8 @@
 ;;(define-action "Initialize LispWorks Tools" "Ensure System Browser"
 ;;  (lambda (&optional screen) (capi:find-interface 'lw-tools:system-browser :screen screen)))
 
+;; downcase symbols then printing
+(setf *print-case* :downcase)
 
 (format *standard-output* "~%Press Cmd+F1 to show Hyperspec for symbol~%")
 (format *standard-output* "Press Alt+F1 to show Documentation for symbol~%~%")
