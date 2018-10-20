@@ -82,6 +82,10 @@
 ;; do not highlight found source and show found definition at 4th line
 (setf editor:*source-found-action* '(4 nil))
 
+;; Add Esc as a interrupt key together with Ctrl-g
+(editor:set-interrupt-keys '("Escape" "Control-g"))
+
+
 ;; aliases for upcase/downcase region commands
 (editor:define-command-synonym "Upcase Region" "Uppercase Region")
 (editor:define-command-synonym "Downcase Region" "Lowercase Region")
