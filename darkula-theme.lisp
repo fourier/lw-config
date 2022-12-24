@@ -53,7 +53,7 @@
   :region '(:background :darkula-selection-background)
   :highlight '(:background :darkula-background)
   :font-lock-function-name-face '(:foreground :darkula-function-name)
-  :font-lock-comment-face '(:foreground :darkula-comment)
+  :font-lock-comment-face '(:foreground :darkula-comment :italic-p t)
   :font-lock-type-face '(:foreground :darkula-type)
   :font-lock-variable-name-face '(:foreground :darkula-variable-name :italic-p t)
   :font-lock-string-face '(:foreground :darkula-string)
