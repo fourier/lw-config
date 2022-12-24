@@ -123,3 +123,19 @@
 ;;(editor:bind-key "View Source Search" "Ctrl-d" :mode "Lisp")
 
 (editor:bind-key "Focus On Buffers Search" "F2" :mode "Lisp")
+
+;; Some Stepper binds
+(editor:bind-key "Stepper Step Through Call" "F7" :mode "Stepper")
+(editor:bind-key "Stepper Continue" "F5" :mode "Stepper")
+
+
+;; Hotkey to switch to different tools
+(editor:bind-key "Tools Editor" "Meta-e")
+(editor:bind-key "Tools Listener" "Meta-l")
+(editor:bind-key "Tools Object Clipboard" "Meta-o")
+
+;; Clip hotkey
+(editor:bind-key "Values Clip" #("Control-c" "Control-o") :mode "Execute")
+
+;; Go back for M-. M-,
+(editor:bind-key "Go Back" "Meta-," :mode "Lisp")
