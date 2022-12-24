@@ -224,16 +224,11 @@ FILENAME is the number, move the line with this number"
                  1)))
         ;; find existing Editor or create a new one
         (if-let (editor-interface (capi:locate-interface 'lispworks-tools:editor))
-            (progn
-              (format *standard-output* "Found editor interface ~a~%" editor-interface)
-              (capi:execute-with-interface
-               editor-interface
-               (lambda ()
-                 (if-let (window (editor:current-window))
-                     (progn
-                       (format *standard-output* "current window found")
-                       (editor:find-line-in-file  edit-filename line-number window))
-                   (format *standard-output* "no window found")))))
+            (capi:execute-with-interface
+             editor-interface
+             (lambda ()
+               (when-let (window (editor:current-window))
+                 (editor:find-line-in-file  edit-filename line-number window))))
           (let ((editor-buffer 
                  (ed edit-filename)))
             ;; TODO: Doesn't work currently.
