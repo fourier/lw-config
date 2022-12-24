@@ -234,7 +234,7 @@ FILENAME is the number, move the line with this number"
                        (format *standard-output* "current window found")
                        (editor:find-line-in-file  edit-filename line-number window))
                    (format *standard-output* "no window found")))))
-          ;; TODO: line number here
           (let ((editor-buffer 
                  (ed edit-filename)))
+            ;; TODO: Doesn't work currently.
             (editor:goto-line editor-buffer line-number)))))))

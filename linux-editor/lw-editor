@@ -2,6 +2,7 @@
 # lw-editor
 LW=lispworks-7-1-0
 
-echo $1 >/tmp/edfile
-#echo $2 >>/tmp/edfile
+echo $(realpath $1) >/tmp/edfile
+# line number
+echo $2 >>/tmp/edfile
 kill -13 `pgrep $LW`
