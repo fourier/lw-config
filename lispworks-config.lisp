@@ -108,16 +108,16 @@
   (load-config-file "colors.lisp")
   )
 
-;; configuration of the cl-project
-(setf cl-project:*skeleton-directory*
-      (merge-pathnames "Sources/lisp/skeleton/"
-                       #+:MSWINDOWS "C:/" #-:MSWINDOWS(user-homedir-pathname)))
-
-(let ((lw-project
-	   (merge-pathnames "Sources/lisp/lw-project/lw-project.lisp"
-						#+:MSWINDOWS "C:/" #-:MSWINDOWS (user-homedir-pathname))))
-  (when (fad:file-exists-p lw-project)
-	(load lw-project)))
+#+:linux
+(define-action "Initialize LispWorks Tools" "Set SIGPIPE handler"
+               (lambda (&rest args)
+                 (declare (ignore args))
+                 (sys:set-signal-handler
+                  sys::unix-sigpipe
+                  (lambda (&rest sig)
+                    (declare (ignore sig))
+                    (format *standard-output* "Caught signal sigpipe~%")
+                    (lw-config.editor-commands::open-file-from-file)))))
 
 ;; Set the IDEA-style color theme
 

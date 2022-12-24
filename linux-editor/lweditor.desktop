@@ -1,0 +1,11 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+Exec=/home/fourier/Applications/LispWorks/lw-editor
+Icon=/home/fourier/Applications/LispWorks/lw.ico
+Name=LispWorks Editor
+Comment=LispWorks Editor
+StartupWMClass=Lispworks-7-1-0-x86-linux
+

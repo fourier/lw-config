@@ -210,3 +210,31 @@ comment it; otherwise add comment at the end of line" ""
 ;;        (inspect iface)))))
 
 ;;(bind-key "Tools Listener" #\meta-control-\l)
+
+(defun open-file-from-file (&optional (filename "/tmp/edfile"))
+  "Read and open a file listed in first line of text file FILENAME.
+Tries to reuse existing Editor window. If second line of the file
+FILENAME is the number, move the line with this number"
+  (with-open-file (stream filename :direction :input)
+    ;; read the first line with the file name to open
+    (when-let (edit-filename (probe-file (ignore-errors (read-line stream))))
+      (let ((line-number
+             ;; read second line of the file - should be a line number
+             (or (ignore-errors (parse-integer (read-line stream)))
+                 1)))
+        ;; find existing Editor or create a new one
+        (if-let (editor-interface (capi:locate-interface 'lispworks-tools:editor))
+            (progn
+              (format *standard-output* "Found editor interface ~a~%" editor-interface)
+              (capi:execute-with-interface
+               editor-interface
+               (lambda ()
+                 (if-let (window (editor:current-window))
+                     (progn
+                       (format *standard-output* "current window found")
+                       (editor:find-line-in-file  edit-filename line-number window))
+                   (format *standard-output* "no window found")))))
+          ;; TODO: line number here
+          (let ((editor-buffer 
+                 (ed edit-filename)))
+            (editor:goto-line editor-buffer line-number)))))))
