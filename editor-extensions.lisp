@@ -161,3 +161,52 @@ comment it; otherwise add comment at the end of line" ""
               (descr (slot-value filter-layout 'capi:filtering-layout))
               (filter (slot-value descr 'capi:text-input-pane)))
    (capi:set-pane-focus filter)))
+
+
+(defcommand "Tools Editor" (p)
+     "Acts like menu Works > Tools > Editor"
+  (declare (ignore p))
+  ;;(lispworks-tools::make-tools-menu-callback 'lispworks-tools:editor))
+  (capi:find-interface 'lw-tools:editor))
+    
+;;(bind-key "Tools Editor" #\meta-control-\e)
+
+(defcommand "Tools Listener" (p)
+     "Acts like menu Works > Tools > Listener"
+  (declare (ignore p))
+  (capi:find-interface 'lw-tools:listener))
+  ;(lispworks-tools::make-tools-menu-callback 'lispworks-tools:listener))
+
+(defcommand "Tools Object Clipboard" (p)
+     "Acts like menu Works > Tools > Object Clipboard"
+  (declare (ignore p))
+  (capi:find-interface 'lw-tools:object-clipboard))
+
+
+(defcommand "Values Clip" (p)
+     "Acts like menu Values > Clip"
+  (declare (ignore p))
+  ;; get the current editor window
+  (when-let (cw (current-window))
+    ;; extract the capi text pane out of it
+    (when (slot-boundp cw 'editor::text-pane)
+      ;; capi text pane could be used to get the top level interface -
+      ;; the Listener window itself
+      (when-let (iface (capi:top-level-interface (slot-value cw 'editor::text-pane)))
+        ;; now try to find the "Values" toplevel menu
+        (when-let (values-menu (find-if (lambda (m)
+                                          (and (slot-boundp m 'capi::title)
+                                               (string= "Values"
+                                                        (slot-value m 'capi::title))))
+                                        (capi:interface-menu-bar-items iface)))
+          (let* ((component (elt (capi:menu-items values-menu) 0))
+                 (item (capi:get-collection-item component 0))
+                 (menu-item (capi:get-collection-item item 2)))
+            (when (capi:menu-object-enabled item)
+              (funcall (capi:callbacks-selection-callback menu-item)
+                       iface))))))))
+;;;                        (symbol-value 'editor::*)))))))))
+;;; ;;          (inspect values-menu))))))
+;;        (inspect iface)))))
+
+;;(bind-key "Tools Listener" #\meta-control-\l)

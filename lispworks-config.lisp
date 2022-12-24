@@ -26,10 +26,6 @@
 ;; update list of QuickLisp projects
 (ql:register-local-projects)
 
-;; load dependencies used in this config file
-(ql:quickload "cl-fad")
-(ql:quickload :cl-project)
-
 
 ;; to avoid printing circular references. See heap overflow example
 ;; http://paste.lisp.org/+31DI
@@ -102,14 +98,7 @@
 
 
 (flet ((load-config-file (filename)
-		 (let ((file-full-path (cl-fad:merge-pathnames-as-file
-								#+MSWINDOWS
-								"C:/Sources/lisp/lw-config/"
-								#-MSWINDOWS
-								(cl-fad:pathname-directory-pathname *load-truename*)
-								filename)))
-		   (format *standard-output* "Loading config file: ~s" file-full-path)
-		   (load file-full-path))))
+         (compile-file (lw:current-pathname filename) :load t)))
   (load-config-file "editor-extensions.lisp")
   (load-config-file "dvorak-binds.lisp")
   (load-config-file "other-binds.lisp")
@@ -132,8 +121,9 @@
 
 ;; Set the IDEA-style color theme
 
-#+(and (not lispworks-personal-edition) (not cocoa)) (editor-color-theme:color-theme "default")
-#+cocoa (editor-color-theme:color-theme "darkula")
+#+(and (not lispworks-personal-edition) windows) (editor-color-theme:color-theme "default")
+#+(or cocoa linux) (editor-color-theme:color-theme "darkula")
+
 ;; Change the background colors of LispWorks' In-place completion and
 ;; 'Function Arglist Displayer' windows:
 ;; (setf capi::*editor-pane-in-place-background* :black)
@@ -152,6 +142,10 @@
 ;; downcase symbols then printing
 (setf *print-case* :downcase)
 
-(format *standard-output* "~%Press Cmd+F1 to show Hyperspec for symbol~%")
-(format *standard-output* "Press Alt+F1 to show Documentation for symbol~%~%")
+;; set extensions for asd same as for lisp
+(editor:define-file-type-hook ("asd" "system") (buffer type)
+  (declare (ignore type))
+  (setf (editor:buffer-major-mode buffer) "Lisp"))
+
+
 
