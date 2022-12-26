@@ -86,6 +86,9 @@
 (editor:define-command-synonym "Upcase Region" "Uppercase Region")
 (editor:define-command-synonym "Downcase Region" "Lowercase Region")
 
+;; Set the scroll step for cursor scrolling to 1
+(setf (editor:variable-value 'editor::scroll-step) 1)
+
 ;; the following two forms make sure the "Find Source" command works
 ;; with the editor source
 #-:lispworks-personal-edition
