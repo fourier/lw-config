@@ -2,7 +2,7 @@
 
 This project has given up GitHub.  ([See Software Freedom Conservancy's *Give Up  GitHub* site for details](https://GiveUpGitHub.org).)
 
-You can now find this project at [INSERT-URL-OR-DESCRIPTION](INSERT-URL) instead.
+You can now find this project at [https://codeberg.org/fourier/lw-config](https://codeberg.org/fourier/lw-config) instead.
 
 Any use of this project's code by GitHub Copilot, past or present, is done without our permission.  We do not consent to GitHub's use of this project's code in Copilot.
 
