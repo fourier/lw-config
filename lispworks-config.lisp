@@ -124,7 +124,7 @@
 
 ;; Set the IDEA-style color theme
 
-#+(and (not lispworks-personal-edition) windows) (editor-color-theme:color-theme "default")
+;;#+(and (not lispworks-personal-edition) windows) (editor-color-theme:color-theme "default")
 #+(or cocoa linux) (editor-color-theme:color-theme "darkula")
 
 ;; Change the background colors of LispWorks' In-place completion and
